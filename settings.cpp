@@ -383,7 +383,7 @@ QString Settings::dataPath()
 
 QString Settings::sourcePath()
 {
-    return QString("source") + QDir::separator();
+    return QString("src") + QDir::separator();
 }
 
 QString Settings::temporaryPath()
