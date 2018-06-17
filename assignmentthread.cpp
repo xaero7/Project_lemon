@@ -113,7 +113,7 @@ const QList< QPair<int, int> >& AssignmentThread::getNeedRejudge() const
 bool AssignmentThread::traditionalTaskPrepare()
 {
     compileState = NoValidSourceFile;
-    QDir contestantDir = QDir(Settings::sourcePath() + contestantName);
+    QDir contestantDir = QDir(Settings::sourcePath() + contestantName + QDir::separator() + task->getSourceFileName());
     QList<Compiler*> compilerList = settings->getCompilerList();
     
     for (int i = 0; i < compilerList.size(); i ++) {
@@ -125,7 +125,7 @@ bool AssignmentThread::traditionalTaskPrepare()
         QStringList files = contestantDir.entryList(filters, QDir::Files);
         sourceFile = "";
         for (int j = 0; j < files.size(); j ++) {
-            qint64 fileSize = QFileInfo(Settings::sourcePath() + contestantName + QDir::separator() + files[j]).size();
+            qint64 fileSize = QFileInfo(Settings::sourcePath() + contestantName + QDir::separator() + task->getSourceFileName() + QDir::separator() + files[j]).size();
             if (fileSize <= settings->getFileSizeLimit() * 1024) {
                 sourceFile = files[j];
                 break;
@@ -134,7 +134,7 @@ bool AssignmentThread::traditionalTaskPrepare()
         
         if (! sourceFile.isEmpty()) {
             QDir(Settings::temporaryPath()).mkdir(contestantName);
-            QFile::copy(Settings::sourcePath() + contestantName + QDir::separator() + sourceFile,
+            QFile::copy(Settings::sourcePath() + contestantName + QDir::separator() + task->getSourceFileName() + QDir::separator() + sourceFile,
                         Settings::temporaryPath() + contestantName + QDir::separator() + sourceFile);
             QStringList configurationNames = compilerList[i]->getConfigurationNames();
             QStringList compilerArguments = compilerList[i]->getCompilerArguments();
@@ -347,7 +347,7 @@ void AssignmentThread::assign()
         QString fileName;
         fileName = QFileInfo(curTestCase->getInputFiles().at(curSingleCaseIndex)).completeBaseName();
         fileName += QString(".") + task->getAnswerFileExtension();
-        thread->setAnswerFile(Settings::sourcePath() + contestantName + QDir::separator() + fileName);
+        thread->setAnswerFile(Settings::sourcePath() + contestantName + QDir::separator() + task->getSourceFileName() + QDir::separator() + fileName);
     }
     thread->setTask(task);
     
