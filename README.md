@@ -1,6 +1,5 @@
 Project_lemon
 =============
-HGOI modified
 
 A clone of Project-Lemon on Google code (https://code.google.com/p/project-lemon/)
 
